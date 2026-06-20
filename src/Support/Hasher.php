@@ -16,7 +16,7 @@ namespace Probabilistic\Support;
  * This avoids needing k independent hash functions while preserving the
  * uniformity guarantees the data structures above rely on.
  *
- * PHP-specific note: on 64-bit builds PHP integers are 64-bit, so 32-bit
+ * PHP-specific note: on 64-bit builds, PHP integers are 64-bit, so 32-bit
  * intermediate values never silently overflow into float (which would
  * happen on 32-bit builds and silently corrupt results). Every step below
  * explicitly masks with & 0xFFFFFFFF to keep values within true 32-bit
@@ -43,7 +43,7 @@ final class Hasher
 
     /**
      * Second independent hash, using PHP's built-in CRC32.
-     * crc32() and FNV-1a have different mathematical structure,
+     * crc32() and FNV-1a have different mathematical structures,
      * which is what double hashing requires to behave like independent
      * hash functions.
      */
@@ -53,7 +53,7 @@ final class Hasher
     }
 
     /**
-     * 32-bit MurmurHash3. Unlike fnv1a above, this has strong avalanche,
+     * 32-bit MurmurHash3. Unlike fnv1a above, this has a strong avalanche,
      * which HyperLogLog depends on: its cardinality estimate is acutely
      * sensitive to non-uniformity in the hash, and FNV-1a's weaker bit
      * mixing skews the register distribution enough to bias the estimate by

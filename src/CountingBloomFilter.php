@@ -50,7 +50,7 @@ final class CountingBloomFilter
         foreach ($this->hashIndices($item) as $index) {
             if ($this->counters[$index] >= self::MAX_COUNT) {
                 throw new CounterOverflowException(
-                    "Counter at index {$index} reached the maximum of " . self::MAX_COUNT .
+                    "Counter at index $index reached the maximum of " . self::MAX_COUNT .
                     '. The filter is undersized for this workload.'
                 );
             }

@@ -108,17 +108,18 @@ final class HyperLogLog
         };
     }
 
+    /**
+     * Number of leading zero bits in the low `bitWidth` bits of $value,
+     * scanning from the most significant of those bits. Returns $bitWidth
+     * when none of them are set.
+     */
     private function leadingZeroCount(int $value, int $bitWidth): int
     {
-        if ($value === 0) {
-            return $bitWidth;
+        for ($count = 0; $count < $bitWidth; $count++) {
+            if (($value & (1 << ($bitWidth - 1 - $count))) !== 0) {
+                return $count;
+            }
         }
-        $count = 0;
-        $mask = 1 << ($bitWidth - 1);
-        while (($value & $mask) === 0) {
-            $count++;
-            $mask >>= 1;
-        }
-        return $count;
+        return $bitWidth;
     }
 }

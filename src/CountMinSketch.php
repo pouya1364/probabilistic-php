@@ -76,14 +76,13 @@ final class CountMinSketch
     }
 
     /**
-     * @return int[] row => column index, one entry per row (depth total)
+     * One column index per row (depth total). deriveHashes already returns a
+     * 0-indexed list, so its keys are the row numbers directly.
+     *
+     * @return int[] row => column index
      */
     private function rowIndices(string $item): array
     {
-        $indices = [];
-        foreach (Hasher::deriveHashes($item, $this->depth, $this->width) as $row => $col) {
-            $indices[$row] = $col;
-        }
-        return $indices;
+        return Hasher::deriveHashes($item, $this->depth, $this->width);
     }
 }

@@ -69,7 +69,7 @@ final class BitArray
     {
         if ($index < 0 || $index >= $this->size) {
             throw new IndexOutOfRangeException(
-                "Bit index {$index} is out of bounds for a BitArray of size {$this->size}."
+                "Bit index $index is out of bounds for a BitArray of size $this->size."
             );
         }
     }

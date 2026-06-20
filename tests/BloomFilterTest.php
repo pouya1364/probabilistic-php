@@ -20,13 +20,13 @@ final class BloomFilterTest extends TestCase
         $filter = BloomFilter::create(expectedItems: 10_000, falsePositiveRate: 0.01);
 
         for ($i = 0; $i < 10_000; $i++) {
-            $filter->add("item-{$i}");
+            $filter->add("item-$i");
         }
 
         for ($i = 0; $i < 10_000; $i++) {
             self::assertTrue(
-                $filter->mightContain("item-{$i}"),
-                "False negative for item-{$i}; this must never happen.",
+                $filter->mightContain("item-$i"),
+                "False negative for item-$i; this must never happen.",
             );
         }
     }
@@ -37,12 +37,12 @@ final class BloomFilterTest extends TestCase
         $filter = BloomFilter::create(expectedItems: 10_000, falsePositiveRate: $expectedRate);
 
         for ($i = 0; $i < 10_000; $i++) {
-            $filter->add("item-{$i}");
+            $filter->add("item-$i");
         }
 
         $falsePositives = 0;
         for ($i = 10_000; $i < 20_000; $i++) {
-            if ($filter->mightContain("item-{$i}")) {
+            if ($filter->mightContain("item-$i")) {
                 $falsePositives++;
             }
         }
@@ -54,7 +54,7 @@ final class BloomFilterTest extends TestCase
         self::assertLessThan(
             $expectedRate * 3,
             $observedRate,
-            "False positive rate {$observedRate} is far outside the expected ~{$expectedRate}.",
+            "False positive rate $observedRate is far outside the expected ~$expectedRate.",
         );
     }
 

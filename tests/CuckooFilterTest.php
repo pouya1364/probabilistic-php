@@ -41,12 +41,12 @@ final class CuckooFilterTest extends TestCase
     {
         $filter = CuckooFilter::create(expectedItems: 10_000);
         for ($i = 0; $i < 10_000; $i++) {
-            $filter->add("item-{$i}");
+            $filter->add("item-$i");
         }
         for ($i = 0; $i < 10_000; $i++) {
             self::assertTrue(
-                $filter->contains("item-{$i}"),
-                "False negative for item-{$i} after eviction; the XOR trick is inconsistent.",
+                $filter->contains("item-$i"),
+                "False negative for item-$i after eviction; the XOR trick is inconsistent.",
             );
         }
     }
@@ -55,12 +55,12 @@ final class CuckooFilterTest extends TestCase
     {
         $filter = CuckooFilter::create(expectedItems: 10_000);
         for ($i = 0; $i < 10_000; $i++) {
-            $filter->add("item-{$i}");
+            $filter->add("item-$i");
         }
 
         $falsePositives = 0;
         for ($i = 10_000; $i < 20_000; $i++) {
-            if ($filter->contains("item-{$i}")) {
+            if ($filter->contains("item-$i")) {
                 $falsePositives++;
             }
         }
@@ -73,7 +73,7 @@ final class CuckooFilterTest extends TestCase
         self::assertLessThan(
             0.05,
             $observedRate,
-            "False positive rate {$observedRate} is far above the expected ~3%.",
+            "False positive rate $observedRate is far above the expected ~3%.",
         );
     }
 
@@ -88,7 +88,7 @@ final class CuckooFilterTest extends TestCase
 
         $this->expectException(FilterFullException::class);
         for ($i = 0; $i < 1_000; $i++) {
-            $filter->add("overflow-{$i}");
+            $filter->add("overflow-$i");
         }
     }
 

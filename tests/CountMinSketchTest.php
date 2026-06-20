@@ -47,7 +47,7 @@ final class CountMinSketchTest extends TestCase
 
         $truth = [];
         for ($i = 0; $i < 500; $i++) {
-            $key = "key-{$i}";
+            $key = "key-$i";
             $times = ($i % 5) + 1;
             for ($t = 0; $t < $times; $t++) {
                 $cms->increment($key);
@@ -59,7 +59,7 @@ final class CountMinSketchTest extends TestCase
             self::assertGreaterThanOrEqual(
                 $trueCount,
                 $cms->estimate($key),
-                "Underestimate for {$key}: this must never happen.",
+                "Underestimate for $key: this must never happen.",
             );
         }
     }
@@ -70,7 +70,7 @@ final class CountMinSketchTest extends TestCase
         $b = CountMinSketch::create(width: 10_000, depth: 5);
 
         $a->increment('shared', 3);
-        $a->increment('only-a', 1);
+        $a->increment('only-a');
         $b->increment('shared', 4);
         $b->increment('only-b', 9);
 

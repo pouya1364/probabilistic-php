@@ -41,7 +41,7 @@ final class CountingBloomFilterTest extends TestCase
 
     /**
      * Re-adding the same item drives its shared slots toward the cap;
-     * the add that would push a counter past 255 must throw rather than
+     * the adding that would push a counter past 255 must throw rather than
      * silently wrap a single byte back to zero.
      */
     public function testCounterOverflowThrowsAtBoundary(): void
@@ -60,10 +60,10 @@ final class CountingBloomFilterTest extends TestCase
     {
         $filter = CountingBloomFilter::create(expectedItems: 10_000, falsePositiveRate: 0.01);
         for ($i = 0; $i < 10_000; $i++) {
-            $filter->add("item-{$i}");
+            $filter->add("item-$i");
         }
         for ($i = 0; $i < 10_000; $i++) {
-            self::assertTrue($filter->mightContain("item-{$i}"));
+            self::assertTrue($filter->mightContain("item-$i"));
         }
     }
 
@@ -73,12 +73,12 @@ final class CountingBloomFilterTest extends TestCase
         $filter = CountingBloomFilter::create(expectedItems: 10_000, falsePositiveRate: $expectedRate);
 
         for ($i = 0; $i < 10_000; $i++) {
-            $filter->add("item-{$i}");
+            $filter->add("item-$i");
         }
 
         $falsePositives = 0;
         for ($i = 10_000; $i < 20_000; $i++) {
-            if ($filter->mightContain("item-{$i}")) {
+            if ($filter->mightContain("item-$i")) {
                 $falsePositives++;
             }
         }
@@ -88,7 +88,7 @@ final class CountingBloomFilterTest extends TestCase
         self::assertLessThan(
             $expectedRate * 3,
             $observedRate,
-            "False positive rate {$observedRate} is far outside the expected ~{$expectedRate}.",
+            "False positive rate $observedRate is far outside the expected ~$expectedRate.",
         );
     }
 

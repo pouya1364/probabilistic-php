@@ -22,7 +22,7 @@ final class HyperLogLogTest extends TestCase
         $hll = new HyperLogLog(14);
         $distinct = 100_000;
         for ($i = 0; $i < $distinct; $i++) {
-            $hll->add("visitor-{$i}");
+            $hll->add("visitor-$i");
         }
 
         $estimate = $hll->estimate();
@@ -31,7 +31,7 @@ final class HyperLogLogTest extends TestCase
         self::assertLessThan(
             0.10,
             $error,
-            "Estimate {$estimate} is more than 10% off the true {$distinct}.",
+            "Estimate $estimate is more than 10% off the true $distinct.",
         );
     }
 
@@ -68,12 +68,12 @@ final class HyperLogLogTest extends TestCase
         $union = new HyperLogLog(14);
 
         for ($i = 0; $i < 30_000; $i++) {
-            $a->add("a-{$i}");
-            $union->add("a-{$i}");
+            $a->add("a-$i");
+            $union->add("a-$i");
         }
         for ($i = 0; $i < 30_000; $i++) {
-            $b->add("b-{$i}");
-            $union->add("b-{$i}");
+            $b->add("b-$i");
+            $union->add("b-$i");
         }
 
         $a->merge($b);

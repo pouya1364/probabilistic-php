@@ -57,15 +57,16 @@ final class CuckooFilter
 
         // Both candidate buckets are full — start the eviction dance.
         //
-        // Eviction relocation is randomised (random_int / array_rand), so two
-        // runs that insert the same items can lay them out differently. That
-        // randomness is deliberately not seedable here: the public surface is
-        // just create(int), and the behaviours that matter — an added item is
-        // always found, a removed one is gone, and an over-full filter throws
-        // rather than looping forever — hold regardless of which slot is
-        // evicted. The probabilistic property (false-positive rate) is checked
-        // statistically over many items, the same way the Bloom filters are.
-        $index = random_int(0, 1) === 0 ? $i1 : $i2;
+        // Eviction is randomized via array_rand, so two runs that insert the
+        // same items can lay them out differently. That randomness is
+        // deliberately not seedable here: the public surface is just
+        // create(int), and the behaviours that matter — an added item is always
+        // found, a removed one is gone, and an over-full filter throws rather
+        // than looping forever — hold regardless of which slot is evicted. The
+        // probabilistic property (false-positive rate) is checked statistically
+        // over many items, the same way the Bloom filters are.
+        $candidates = [$i1, $i2];
+        $index = $candidates[array_rand($candidates)];
         for ($kick = 0; $kick < self::MAX_KICKS; $kick++) {
             $slotIndex = array_rand($this->buckets[$index]);
             $evicted = $this->buckets[$index][$slotIndex];
@@ -135,7 +136,7 @@ final class CuckooFilter
      * which is what makes cuckoo eviction possible without re-hashing
      * the original item.
      *
-     * This is only a true involution (alt(alt(i)) == i) because
+     * This is only true involution (alt(alt(i)) == i) because
      * bucketCount is always a power of two, which makes `% bucketCount`
      * equivalent to masking the low bits — so XOR-ing the same
      * fingerprint hash a second time exactly undoes the first.
