@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Probabilistic\Support;
 
+use Probabilistic\Exception\IndexOutOfRangeException;
+use Probabilistic\Exception\InvalidConfigurationException;
+
 /**
  * A fixed-size, memory-efficient array of bits backed by a PHP binary string.
  * Each byte of the underlying string stores 8 bits, making this roughly
@@ -17,7 +20,7 @@ final class BitArray
     public function __construct(int $size)
     {
         if ($size < 1) {
-            throw new \InvalidArgumentException('BitArray size must be at least 1.');
+            throw new InvalidConfigurationException('BitArray size must be at least 1.');
         }
         $this->size = $size;
         $byteLength = (int) ceil($size / 8);
@@ -65,7 +68,7 @@ final class BitArray
     private function assertInBounds(int $index): void
     {
         if ($index < 0 || $index >= $this->size) {
-            throw new \OutOfRangeException(
+            throw new IndexOutOfRangeException(
                 "Bit index {$index} is out of bounds for a BitArray of size {$this->size}."
             );
         }

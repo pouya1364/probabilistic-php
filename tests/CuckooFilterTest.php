@@ -7,6 +7,7 @@ namespace Probabilistic\Tests;
 use PHPUnit\Framework\TestCase;
 use Probabilistic\CuckooFilter;
 use Probabilistic\Exception\FilterFullException;
+use Probabilistic\Exception\InvalidConfigurationException;
 
 final class CuckooFilterTest extends TestCase
 {
@@ -33,7 +34,7 @@ final class CuckooFilterTest extends TestCase
 
     /**
      * Items relocated by eviction must still be findable. At ~60% load a
-     * large batch will trigger real evictions, so a broken XOR involution
+     * large batch will trigger real evictions, so the broken XOR involution
      * would surface here as a false negative.
      */
     public function testNeverReportsFalseNegativesEvenAfterEvictions(): void
@@ -66,7 +67,7 @@ final class CuckooFilterTest extends TestCase
 
         $observedRate = $falsePositives / 10_000;
 
-        // With 8-bit fingerprints and 4-slot buckets the theoretical ceiling
+        // With 8-bit fingerprints and 4-slot buckets, the theoretical ceiling
         // is roughly 2*4/2^8 ~= 3%. 5% leaves room for variance while still
         // catching a fingerprinting or bucket-indexing bug.
         self::assertLessThan(
@@ -93,7 +94,7 @@ final class CuckooFilterTest extends TestCase
 
     public function testRejectsZeroExpectedItems(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         CuckooFilter::create(expectedItems: 0);
     }
 }

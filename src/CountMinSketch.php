@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Probabilistic;
 
+use Probabilistic\Exception\InvalidConfigurationException;
 use Probabilistic\Support\Hasher;
 
 /**
@@ -32,7 +33,7 @@ final class CountMinSketch
     public static function create(int $width, int $depth): self
     {
         if ($width < 1 || $depth < 1) {
-            throw new \InvalidArgumentException('width and depth must each be at least 1.');
+            throw new InvalidConfigurationException('width and depth must each be at least 1.');
         }
         return new self($width, $depth);
     }
@@ -65,7 +66,7 @@ final class CountMinSketch
     public function merge(self $other): void
     {
         if ($other->width !== $this->width || $other->depth !== $this->depth) {
-            throw new \InvalidArgumentException('Cannot merge sketches with different dimensions.');
+            throw new InvalidConfigurationException('Cannot merge sketches with different dimensions.');
         }
         for ($row = 0; $row < $this->depth; $row++) {
             for ($col = 0; $col < $this->width; $col++) {

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Probabilistic\Tests\Support;
 
 use PHPUnit\Framework\TestCase;
+use Probabilistic\Exception\IndexOutOfRangeException;
+use Probabilistic\Exception\InvalidConfigurationException;
 use Probabilistic\Support\BitArray;
 
 final class BitArrayTest extends TestCase
@@ -67,37 +69,37 @@ final class BitArrayTest extends TestCase
         $bits = new BitArray(9);
         $bits->set(8);
         self::assertTrue($bits->get(8));
-        $this->expectException(\OutOfRangeException::class);
+        $this->expectException(IndexOutOfRangeException::class);
         $bits->get(9);
     }
 
     public function testConstructorRejectsZeroSize(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         new BitArray(0);
     }
 
     public function testConstructorRejectsNegativeSize(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         new BitArray(-5);
     }
 
     public function testGetOutOfBoundsThrows(): void
     {
-        $this->expectException(\OutOfRangeException::class);
+        $this->expectException(IndexOutOfRangeException::class);
         (new BitArray(10))->get(10);
     }
 
     public function testSetOutOfBoundsThrows(): void
     {
-        $this->expectException(\OutOfRangeException::class);
+        $this->expectException(IndexOutOfRangeException::class);
         (new BitArray(10))->set(10);
     }
 
     public function testNegativeIndexThrows(): void
     {
-        $this->expectException(\OutOfRangeException::class);
+        $this->expectException(IndexOutOfRangeException::class);
         (new BitArray(10))->get(-1);
     }
 }

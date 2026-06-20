@@ -6,6 +6,9 @@ namespace Probabilistic\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Probabilistic\CountingBloomFilter;
+use Probabilistic\Exception\CounterOverflowException;
+use Probabilistic\Exception\InvalidConfigurationException;
+use Probabilistic\Exception\UnknownItemException;
 
 final class CountingBloomFilterTest extends TestCase
 {
@@ -22,7 +25,7 @@ final class CountingBloomFilterTest extends TestCase
     public function testRemovingNeverAddedItemThrows(): void
     {
         $filter = CountingBloomFilter::create(expectedItems: 1_000, falsePositiveRate: 0.01);
-        $this->expectException(\LogicException::class);
+        $this->expectException(UnknownItemException::class);
         $filter->remove('was-never-here');
     }
 
@@ -32,7 +35,7 @@ final class CountingBloomFilterTest extends TestCase
         $filter->add('once');
         $filter->remove('once');
 
-        $this->expectException(\LogicException::class);
+        $this->expectException(UnknownItemException::class);
         $filter->remove('once');
     }
 
@@ -49,7 +52,7 @@ final class CountingBloomFilterTest extends TestCase
             $filter->add('hot-key');
         }
 
-        $this->expectException(\OverflowException::class);
+        $this->expectException(CounterOverflowException::class);
         $filter->add('hot-key');
     }
 
@@ -91,13 +94,13 @@ final class CountingBloomFilterTest extends TestCase
 
     public function testRejectsZeroExpectedItems(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         CountingBloomFilter::create(expectedItems: 0, falsePositiveRate: 0.01);
     }
 
     public function testRejectsFalsePositiveRateOutOfRange(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         CountingBloomFilter::create(expectedItems: 100, falsePositiveRate: 1.0);
     }
 }

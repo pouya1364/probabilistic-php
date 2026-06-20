@@ -6,6 +6,7 @@ namespace Probabilistic\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Probabilistic\CountMinSketch;
+use Probabilistic\Exception\InvalidConfigurationException;
 
 final class CountMinSketchTest extends TestCase
 {
@@ -85,19 +86,19 @@ final class CountMinSketchTest extends TestCase
         $a = CountMinSketch::create(width: 1_000, depth: 5);
         $b = CountMinSketch::create(width: 2_000, depth: 5);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         $a->merge($b);
     }
 
     public function testRejectsZeroWidth(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         CountMinSketch::create(width: 0, depth: 5);
     }
 
     public function testRejectsZeroDepth(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         CountMinSketch::create(width: 2_000, depth: 0);
     }
 }

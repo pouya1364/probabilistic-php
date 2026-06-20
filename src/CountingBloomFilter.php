@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Probabilistic;
 
+use Probabilistic\Exception\CounterOverflowException;
+use Probabilistic\Exception\InvalidConfigurationException;
+use Probabilistic\Exception\UnknownItemException;
 use Probabilistic\Support\Hasher;
 
 /**
@@ -30,10 +33,10 @@ final class CountingBloomFilter
     public static function create(int $expectedItems, float $falsePositiveRate): self
     {
         if ($expectedItems < 1) {
-            throw new \InvalidArgumentException('expectedItems must be at least 1.');
+            throw new InvalidConfigurationException('expectedItems must be at least 1.');
         }
         if ($falsePositiveRate <= 0 || $falsePositiveRate >= 1) {
-            throw new \InvalidArgumentException('falsePositiveRate must be between 0 and 1, exclusive.');
+            throw new InvalidConfigurationException('falsePositiveRate must be between 0 and 1, exclusive.');
         }
 
         $size = (int) ceil(-($expectedItems * log($falsePositiveRate)) / (log(2) ** 2));
@@ -46,7 +49,7 @@ final class CountingBloomFilter
     {
         foreach ($this->hashIndices($item) as $index) {
             if ($this->counters[$index] >= self::MAX_COUNT) {
-                throw new \OverflowException(
+                throw new CounterOverflowException(
                     "Counter at index {$index} reached the maximum of " . self::MAX_COUNT .
                     '. The filter is undersized for this workload.'
                 );
@@ -63,7 +66,7 @@ final class CountingBloomFilter
     public function remove(string $item): void
     {
         if (!$this->mightContain($item)) {
-            throw new \LogicException('Cannot remove an item that was never added (or already removed).');
+            throw new UnknownItemException('Cannot remove an item that was never added (or already removed).');
         }
         foreach ($this->hashIndices($item) as $index) {
             $this->counters[$index]--;

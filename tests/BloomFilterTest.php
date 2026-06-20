@@ -6,6 +6,7 @@ namespace Probabilistic\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Probabilistic\BloomFilter;
+use Probabilistic\Exception\InvalidConfigurationException;
 
 final class BloomFilterTest extends TestCase
 {
@@ -65,31 +66,31 @@ final class BloomFilterTest extends TestCase
 
     public function testRejectsZeroExpectedItems(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         BloomFilter::create(expectedItems: 0, falsePositiveRate: 0.01);
     }
 
     public function testRejectsNegativeExpectedItems(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         BloomFilter::create(expectedItems: -1, falsePositiveRate: 0.01);
     }
 
     public function testRejectsFalsePositiveRateOfZero(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         BloomFilter::create(expectedItems: 100, falsePositiveRate: 0.0);
     }
 
     public function testRejectsFalsePositiveRateOfOne(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         BloomFilter::create(expectedItems: 100, falsePositiveRate: 1.0);
     }
 
     public function testRejectsNegativeFalsePositiveRate(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidConfigurationException::class);
         BloomFilter::create(expectedItems: 100, falsePositiveRate: -0.1);
     }
 }

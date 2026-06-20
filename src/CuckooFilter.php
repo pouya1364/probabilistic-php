@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Probabilistic;
 
 use Probabilistic\Exception\FilterFullException;
+use Probabilistic\Exception\InvalidConfigurationException;
 use Probabilistic\Support\Hasher;
 
 /**
@@ -34,7 +35,7 @@ final class CuckooFilter
     public static function create(int $expectedItems): self
     {
         if ($expectedItems < 1) {
-            throw new \InvalidArgumentException('expectedItems must be at least 1.');
+            throw new InvalidConfigurationException('expectedItems must be at least 1.');
         }
         // Target load factor ~95% per the reference paper, rounded
         // up to a power of two for clean modulo-free index wrapping.
