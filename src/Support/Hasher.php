@@ -53,6 +53,20 @@ final class Hasher
     }
 
     /**
+     * 32-bit MurmurHash3. Unlike fnv1a above, this has strong avalanche,
+     * which HyperLogLog depends on: its cardinality estimate is acutely
+     * sensitive to non-uniformity in the hash, and FNV-1a's weaker bit
+     * mixing skews the register distribution enough to bias the estimate by
+     * double-digit percentages. Provided natively by ext-hash, which also
+     * sidesteps MurmurHash3's 32-bit constants overflowing PHP's signed
+     * 64-bit multiply if hand-rolled.
+     */
+    public static function murmur3a(string $input): int
+    {
+        return (int) hexdec(hash('murmur3a', $input));
+    }
+
+    /**
      * Derive `count` hash values for the given input, each reduced
      * into the range [0, $mod).
      *
