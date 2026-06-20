@@ -30,8 +30,8 @@ final class BitArray
     public function set(int $index): void
     {
         $this->assertInBounds($index);
-        $byteIndex = intdiv($index, 8);
-        $bitOffset = $index % 8;
+        $byteIndex = $index >> 3;
+        $bitOffset = $index & 7;
         $byte = ord($this->bits[$byteIndex]);
         $this->bits[$byteIndex] = chr($byte | (1 << $bitOffset));
     }
@@ -39,8 +39,8 @@ final class BitArray
     public function get(int $index): bool
     {
         $this->assertInBounds($index);
-        $byteIndex = intdiv($index, 8);
-        $bitOffset = $index % 8;
+        $byteIndex = $index >> 3;
+        $bitOffset = $index & 7;
         $byte = ord($this->bits[$byteIndex]);
         return ($byte & (1 << $bitOffset)) !== 0;
     }
