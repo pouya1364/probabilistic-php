@@ -134,6 +134,13 @@ Because these structures are probabilistic, the test suite mixes two styles: exa
 
 `composer.lock` is intentionally **not** committed: this is a library, so consumers resolve their own compatible dependency versions. Run `composer check` before opening a pull request — analysis, lint, and tests must all pass.
 
+## Framework integrations
+
+Ready-made wiring to use these structures as named, pre-configured services in your framework of choice:
+
+- [probabilistic-laravel](https://github.com/pouya1364/probabilistic-laravel) — Laravel integration via the service container and a Facade.
+- [probabilistic-bundle](https://github.com/pouya1364/probabilistic-bundle) — Symfony bundle exposing them as configured services.
+
 ## Other projects
 
 More of my packages are listed on my [GitHub profile](https://github.com/pouya1364).
